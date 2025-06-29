@@ -13,10 +13,10 @@ mkdir -p "$ASDF_DOWNLOAD_PATH"
 release_file="${ASDF_DOWNLOAD_PATH}/${TOOL_NAME}-${ASDF_INSTALL_VERSION}.tar.xz"
 
 # Download tar.gz file to the download directory
-"${plugin_dir}/lib/utils.py" "${ASDF_INSTALL_VERSION}" "${release_file}"
+"${plugin_dir}/lib/utils.py" download "${ASDF_INSTALL_VERSION}" "${release_file}"
 
 #  Extract contents of tar.gz file into the download directory
 tar -xzf "$release_file" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1 || fail "Could not extract $release_file"
 
-# Remove the tar.gz file since we don't need to keep it
+# Remove the tar file since we don't need to keep it
 rm "$release_file"
