@@ -6,13 +6,6 @@
 
 </div>
 
-# Contents
-
-- [Dependencies](#dependencies)
-- [Install](#install)
-- [Contributing](#contributing)
-- [License](#license)
-
 # Dependencies
 
 - `bash`, `python3`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
@@ -20,17 +13,17 @@
 
 # Install
 
-Plugin:
+First add asdf-zig as plugin:
 
 ```shell
 asdf plugin add zig https://github.com/zigcc/asdf-zig.git
 ```
 
-asdf-zig:
+Then use `asdf-zig` to install zig:
 
 ```shell
 # Show all installable versions
-asdf list-all zig
+asdf list all zig
 
 # Install specific version
 asdf install zig latest

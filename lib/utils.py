@@ -6,8 +6,10 @@ import random
 import platform
 import sys
 import urllib.request
+from urllib.parse import urljoin
 import json
 import hashlib
+import logging
 
 INDEX_URL = os.getenv("ASDF_ZIG_INDEX_URL", "https://ziglang.org/download/index.json")
 HTTP_TIMEOUT = int(os.getenv("ASDF_ZIG_HTTP_TIMEOUT", "30"))
@@ -46,17 +48,21 @@ def all_versions(index=fetch_index()):
     return versions
 
 
-def download_and_check(url, out_file, expected_shasum):
-    print(f"Download tarball from {url} to {out_file}...")
-    chunk_size = 8192  # 8KB chunks
+def download_and_check(url, out_file, expected_shasum, total_size):
+    logging.info(f"Begin download tarball({total_size}) from {url} to {out_file}...")
+    chunk_size = 1024 * 1024 # 1M chunks
     sha256_hash = hashlib.sha256()
     with urllib.request.urlopen(url, timeout=HTTP_TIMEOUT) as response:
         if response.getcode() != 200:
             raise Exception(f"Fetch index.json error: {response.getcode()}")
 
+        read_size = 0
         with open(out_file, "wb") as f:
             while True:
                 chunk = response.read(chunk_size)
+                read_size += len(chunk)
+                progress_percentage = (read_size / total_size) * 100 if total_size > 0 else 0
+                logging.info(f'Downloaded: {read_size}/{total_size} bytes ({progress_percentage:.2f}%)')
                 if not chunk:
                     break  # eof
                 sha256_hash.update(chunk)
@@ -69,20 +75,21 @@ def download_and_check(url, out_file, expected_shasum):
         )
 
 
-def download_tarball(url, out_file, expected_shasum):
+def download_tarball(url, out_file, expected_shasum, total_size):
     filename = url.split("/")[-1]
     random.shuffle(MIRRORS)
-    urls = [f"{mirror}/{filename}" for mirror in MIRRORS]
 
-    for url in urls:
+    for mirror in MIRRORS:
         try:
-            download_and_check(url, out_file, expected_shasum)
+            # Ensure base_url has a trailing slash
+            mirror = mirror if mirror.endswith('/') else mirror + '/'
+            download_and_check(urljoin(mirror, filename), out_file, expected_shasum, total_size)
             return
         except Exception as e:
-            print(f"Current mirror failed, try next. err:{e}")
+            logging.error(f"Current mirror failed, try next. err:{e}")
 
     # All mirrors failed, fallback to original url
-    download_and_check(url, out_file, expected_shasum)
+    download_and_check(url, out_file, expected_shasum, total_size)
 
 
 def download(version, out_file):
@@ -101,7 +108,8 @@ def download(version, out_file):
 
     tarball_url = links[link_key]["tarball"]
     tarball_shasum = links[link_key]["shasum"]
-    download_tarball(tarball_url, out_file, tarball_shasum)
+    tarball_size = int(links[link_key]["size"])
+    download_tarball(tarball_url, out_file, tarball_shasum, tarball_size)
 
 
 def main(args):
@@ -115,9 +123,10 @@ def main(args):
     elif command == "download":
         download(args[1], args[2])
     else:
-        print(f"Unknown command: {command}")
+        logging.error(f"Unknown command: {command}")
         sys.exit(1)
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(message)s')
     main(sys.argv[1:])
