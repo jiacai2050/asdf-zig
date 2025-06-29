@@ -40,8 +40,7 @@ def fetch_index():
             raise Exception(f"Fetch index.json error: {response.getcode()}")
 
 
-def all_versions():
-    index = fetch_index()
+def all_versions(index=fetch_index()):
     versions = [k for k in index.keys() if k != "master"]
     versions.sort(key=lambda v: tuple(map(int, v.split("."))))
     return versions
@@ -98,7 +97,7 @@ def download(version, out_file):
     arch = ARCH_MAPPING.get(arch, arch)
     link_key = f"{arch}-{os_name}"
     if link_key not in links:
-        raise Exception(f"No tarball link for {link_key}")
+        raise Exception(f"No tarball link for {link_key} in {version}")
 
     tarball_url = links[link_key]["tarball"]
     tarball_shasum = links[link_key]["shasum"]

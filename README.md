@@ -1,6 +1,6 @@
 <div align="center">
 
-# asdf-zig [![Build](https://github.com/jiacai2050/asdf-zig/actions/workflows/build.yml/badge.svg)](https://github.com/jiacai2050/asdf-zig/actions/workflows/build.yml) [![Lint](https://github.com/jiacai2050/asdf-zig/actions/workflows/lint.yml/badge.svg)](https://github.com/jiacai2050/asdf-zig/actions/workflows/lint.yml)
+# asdf-zig [![Build](https://github.com/jiacai2050/asdf-zig/actions/workflows/build.yml/badge.svg)](https://github.com/jiacai2050/asdf-zig/actions/workflows/build.yml)
 
 [asdf-zig](https://github.com/jiacai2050/asdf-zig) plugin for the [asdf version manager](https://asdf-vm.com).
 
@@ -15,10 +15,7 @@
 
 # Dependencies
 
-**TODO: adapt this section**
-
-- `bash`, `curl`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
+- `bash`, `python3`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
 
 # Install
 
@@ -38,7 +35,7 @@ asdf list-all zig
 asdf install zig latest
 
 # Set a version globally (on your ~/.tool-versions file)
-asdf global zig latest
+asdf set --home zig latest
 
 # Now asdf-zig commands are available
 zig version
@@ -46,12 +43,6 @@ zig version
 
 Check [asdf](https://github.com/asdf-vm/asdf) readme for more instructions on how to
 install & manage versions.
-
-# Contributing
-
-Contributions of any kind welcome! See the [contributing guide](contributing.md).
-
-[Thanks goes to these contributors](https://github.com/jiacai2050/asdf-zig/graphs/contributors)!
 
 # License
 

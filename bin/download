@@ -10,4 +10,5 @@ mkdir -p "$ASDF_DOWNLOAD_PATH"
 release_file="${ASDF_DOWNLOAD_PATH}/zig-${ASDF_INSTALL_VERSION}.tar.xz"
 
 "${plugin_dir}/lib/utils.py" download "${ASDF_INSTALL_VERSION}" "${release_file}"
-tar -xzf "$release_file" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1
+tar -xf "$release_file" -C "$ASDF_DOWNLOAD_PATH" --strip-components=1
+rm "$release_file"
