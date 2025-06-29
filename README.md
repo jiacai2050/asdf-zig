@@ -1,8 +1,8 @@
 <div align="center">
 
-# asdf-zig [![Build](https://github.com/jiacai2050/asdf-zig/actions/workflows/build.yml/badge.svg)](https://github.com/jiacai2050/asdf-zig/actions/workflows/build.yml)
+# asdf-zig [![Build](https://github.com/zigcc/asdf-zig/actions/workflows/build.yml/badge.svg)](https://github.com/zigcc/asdf-zig/actions/workflows/build.yml)
 
-[asdf-zig](https://github.com/jiacai2050/asdf-zig) plugin for the [asdf version manager](https://asdf-vm.com).
+[asdf-zig](https://github.com/zigcc/asdf-zig) plugin for the [asdf version manager](https://asdf-vm.com).
 
 </div>
 
@@ -16,13 +16,14 @@
 # Dependencies
 
 - `bash`, `python3`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
+- asdf 0.16+
 
 # Install
 
 Plugin:
 
 ```shell
-asdf plugin add zig https://github.com/jiacai2050/asdf-zig.git
+asdf plugin add zig https://github.com/zigcc/asdf-zig.git
 ```
 
 asdf-zig:
@@ -46,4 +47,4 @@ install & manage versions.
 
 # License
 
-See [LICENSE](LICENSE) © [jiacai2050](https://github.com/jiacai2050/)
+See [LICENSE](LICENSE) © [zigcc](https://github.com/zigcc/)

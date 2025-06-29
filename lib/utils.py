@@ -81,7 +81,7 @@ def download_tarball(url, out_file, expected_shasum):
         except Exception as e:
             print(f"Current mirror failed, try next. err:{e}")
 
-    # All mirror failed, fallback to original url
+    # All mirrors failed, fallback to original url
     download_and_check(url, out_file, expected_shasum)
 
 
