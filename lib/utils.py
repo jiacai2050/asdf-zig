@@ -45,7 +45,7 @@ class HTTPAccessError(Exception):
 def http_get(url, timeout=HTTP_TIMEOUT):
     try:
         req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT})
-        return urllib.request.urlopen(req, timeout)
+        return urllib.request.urlopen(req, timeout=timeout)
     except HTTPError as e:
         body = e.read().decode("utf-8")
         raise HTTPAccessError(url, e.code, e.reason, body)
@@ -125,7 +125,7 @@ def download(version, out_file):
 
 
 def main(args):
-    command = args[0] if args else "default"
+    command = args[0] if args else "all-versions"
     if command == "all-versions":
         versions = all_versions()
         print(" ".join(versions))
