@@ -33,13 +33,21 @@ ARCH_MAPPING = {
     "arm64": "aarch64",
 }
 
+class HTTPAccessError(Exception):
+    def __init__(self, url, code, reason, body):
+        super().__init__(f"{url} access failed, code:{code}, reason:{reason}, body:{body}")
+        self.url = url
+        self.code = code
+        self.reason = reason
+        self.body = body
+
 def http_get(url, timeout=HTTP_TIMEOUT):
     try:
         req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT})
         return urllib.request.urlopen(req, timeout)
     except HTTPError as e:
         body = e.read().decode("utf-8")
-        raise Exception(f"{url} access failed, code:{e.code}, reason:{e.reason}, body:{body}")
+        raise HTTPAccessError(url, e.code, e.reason, body)
 
 def fetch_index():
     with http_get(INDEX_URL) as response:
