@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> The repo is now archived and no longer maintained. Please use [asdf-community/asdf-zig](https://github.com/asdf-community/asdf-zig) instead.
+
 <div align="center">
 
 # asdf-zig [![Build](https://github.com/zigcc/asdf-zig/actions/workflows/build.yml/badge.svg)](https://github.com/zigcc/asdf-zig/actions/workflows/build.yml)
