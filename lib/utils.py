@@ -13,6 +13,7 @@ import logging
 
 INDEX_URL = os.getenv("ASDF_ZIG_INDEX_URL", "https://ziglang.org/download/index.json")
 HTTP_TIMEOUT = int(os.getenv("ASDF_ZIG_HTTP_TIMEOUT", "30"))
+USER_AGENT = "asdf-zig (https://github.com/zigcc/asdf-zig)"
 
 # https://github.com/mlugg/setup-zig/blob/main/mirrors.json
 # If any of these mirrors are down, please open an issue!
@@ -32,17 +33,22 @@ ARCH_MAPPING = {
     "arm64": "aarch64",
 }
 
+def http_get(url, timeout=HTTP_TIMEOUT):
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT})
+        return urllib.request.urlopen(req, timeout)
+    except HTTPError as e:
+        body = e.read().decode("utf-8")
+        raise Exception(f"{url} access failed, code:{e.code}, reason:{e.reason}, body:{body}")
 
 def fetch_index():
-    with urllib.request.urlopen(INDEX_URL, timeout=HTTP_TIMEOUT) as response:
-        if response.getcode() == 200:
-            body = response.read().decode("utf-8")
-            return json.loads(body)
-        else:
-            raise Exception(f"Fetch index.json error: {response.getcode()}")
+    with http_get(INDEX_URL) as response:
+        body = response.read().decode("utf-8")
+        return json.loads(body)
 
 
-def all_versions(index=fetch_index()):
+def all_versions():
+    index = fetch_index()
     versions = [k for k in index.keys() if k != "master"]
     versions.sort(key=lambda v: tuple(map(int, v.split("."))))
     return versions
@@ -52,10 +58,7 @@ def download_and_check(url, out_file, expected_shasum, total_size):
     logging.info(f"Begin download tarball({total_size}) from {url} to {out_file}...")
     chunk_size = 1024 * 1024 # 1M chunks
     sha256_hash = hashlib.sha256()
-    with urllib.request.urlopen(url, timeout=HTTP_TIMEOUT) as response:
-        if response.getcode() != 200:
-            raise Exception(f"Fetch index.json error: {response.getcode()}")
-
+    with http_get(url) as response:
         read_size = 0
         with open(out_file, "wb") as f:
             while True:
