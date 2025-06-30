@@ -7,6 +7,7 @@ import platform
 import sys
 import urllib.request
 from urllib.parse import urljoin
+from urllib.error import HTTPError
 import json
 import hashlib
 import logging
